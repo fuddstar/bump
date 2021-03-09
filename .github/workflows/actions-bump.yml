@@ -46,11 +46,10 @@ jobs:
           git checkout integration
           bumpversion $BUMPVERSION_TYPE --list --verbose
           # Push Both Commits and Tags
-          git push --all $GITHUB_ACTOR:$TOKEN@$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
-          git push --tags $GITHUB_ACTOR:$TOKEN@$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+          git push --all $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+          git push --tags $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
         env: 
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-          TOKEN: ${{ secrets.TOKEN }}
           REPO: bump
           BUMPVERSION_TYPE: patch
 
