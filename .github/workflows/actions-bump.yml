@@ -22,7 +22,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
       # Runs a set of commands using the runners shell
       - name: Prep
         run: |
@@ -33,9 +32,12 @@ jobs:
           git config --global user.name $GITHUB_ACTOR
           git config --global push.default simple
           # Clone repo
+          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
           # Install bumpversion
           pip install --upgrade bumpversion
           PATH="$PATH:$HOME/.local/bin"
+          # Move into repo
+          cd $REPO
           # Merge to main
           git checkout integration
           git checkout main
@@ -43,7 +45,7 @@ jobs:
           # Bump Integration!
           git checkout integration
           bumpversion $BUMPVERSION_TYPE --list --verbose
-          
+          # Push Both Commits and Tags
           git push origin --all
           git push origin --tags
         env: 
