@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,7 +30,7 @@ jobs:
           git config --global user.name $GITHUB_ACTOR
           git config --global push.default simple
           # Clone repo
-          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+          git clone https://fuddstar:$TOKEN@github.com/fuddstar/bump.git
           # Install bumpversion
           pip install --upgrade bumpversion
           PATH="$PATH:$HOME/.local/bin"
