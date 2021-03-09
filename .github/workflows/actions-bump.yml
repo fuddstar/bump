@@ -35,6 +35,7 @@ jobs:
           # Install bumpversion
           pip install --upgrade bumpversion
           PATH="$PATH:$HOME/.local/bin"
+          cd $GITHUB_WORKSPACE
           # Merge to main
           git checkout integration
           git checkout main
