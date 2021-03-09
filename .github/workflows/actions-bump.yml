@@ -30,7 +30,7 @@ jobs:
           git config --global user.name $GITHUB_ACTOR
           git config --global push.default simple
           # Clone repo
-          git clone https://fuddstar:$TOKEN@github.com/fuddstar/bump.git
+          git clone https://$GITHUB_ACTOR:$TOKEN@github.com/fuddstar/bump.git
           # Install bumpversion
           pip install --upgrade bumpversion
           PATH="$PATH:$HOME/.local/bin"
