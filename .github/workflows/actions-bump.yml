@@ -35,6 +35,7 @@ jobs:
           git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
           # Install bumpversion
           pip install --upgrade bumpversion
+          PATH="$PATH:$HOME/.local/bin"
           # Move into repo
           cd $REPO
           # Merge to main
@@ -50,5 +51,6 @@ jobs:
         env: 
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
           TOKEN: ${{ secrets.TOKEN }}
+          REPO: bump
 
 
