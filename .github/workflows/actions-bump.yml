@@ -47,9 +47,9 @@ jobs:
         run: |
           # Move into repo
           cd $REPO
-          # Merge to Master
+          # Merge to main
           git checkout integration
-          git checkout master
+          git checkout main
           git merge integration --no-edit
           # Bump Integration!
           git checkout integration
