@@ -30,39 +30,33 @@ jobs:
         run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Prep
         run: |
-          echo Add other actions to build,
-          
-          
-  
-          echo test, and deploy your project.
+          python -V  
+          pip install --upgrade bumpversion
+          # Set git config
+          git config --global user.email $GITLAB_USER_EMAIL
+          git config --global user.name $GITLAB_USER_NAME
+          git config --global push.default simple
+          # Clone repo
+          git clone $CI_REPOSITORY_URL
+          # Install bumpversion
+          pip install --upgrade bumpversion
+      
+      - name: Run
+        run: |
+          # Move into repo
+          cd $REPO
+          # Merge to Master
+          git checkout integration
+          git checkout master
+          git merge integration --no-edit
+          # Bump Integration!
+          git checkout integration
+          bumpversion $BUMPVERSION_TYPE --list --verbose
+          # Push Both Commits and Tags
+          git push --all https://$BOT:$TOKEN@$REPOSITORY_URL
+          git push --tags https://$BOT:$TOKEN@$REPOSITORY_URL
 
 
-before_script:
-  - python -V  
-  - pip install --upgrade bumpversion
-  # Set git config
-  - git config --global user.email $GITLAB_USER_EMAIL
-  - git config --global user.name $GITLAB_USER_NAME
-  - git config --global push.default simple
-  # Clone repo
-  - git clone $CI_REPOSITORY_URL
-  # Install bumpversion
-  - pip install --upgrade bumpversion
-run:
-  script:
-    # Move into repo
-    - cd $REPO
-    # Merge to Master
-    - git checkout integration
-    - git checkout master
-    - git merge integration --no-edit
-    # Bump Integration!
-    - git checkout integration
-    - bumpversion $BUMPVERSION_TYPE --list --verbose
-    # Push Both Commits and Tags
-    - git push --all https://$BOT:$TOKEN@$REPOSITORY_URL
-    - git push --tags https://$BOT:$TOKEN@$REPOSITORY_URL
-  only:
-    - master
+
