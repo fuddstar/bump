@@ -1,0 +1,68 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          
+          
+  
+          echo test, and deploy your project.
+
+
+before_script:
+  - python -V  
+  - pip install --upgrade bumpversion
+  # Set git config
+  - git config --global user.email $GITLAB_USER_EMAIL
+  - git config --global user.name $GITLAB_USER_NAME
+  - git config --global push.default simple
+  # Clone repo
+  - git clone $CI_REPOSITORY_URL
+  # Install bumpversion
+  - pip install --upgrade bumpversion
+run:
+  script:
+    # Move into repo
+    - cd $REPO
+    # Merge to Master
+    - git checkout integration
+    - git checkout master
+    - git merge integration --no-edit
+    # Bump Integration!
+    - git checkout integration
+    - bumpversion $BUMPVERSION_TYPE --list --verbose
+    # Push Both Commits and Tags
+    - git push --all https://$BOT:$TOKEN@$REPOSITORY_URL
+    - git push --tags https://$BOT:$TOKEN@$REPOSITORY_URL
+  only:
+    - master
