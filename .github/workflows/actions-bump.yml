@@ -46,9 +46,9 @@ jobs:
           git checkout integration
           bumpversion $BUMPVERSION_TYPE --list --verbose
           # Push Both Commits and Tags
-          echo $GITHUB_ACTOR:$TOKEN@$github.com/$GITHUB_REPOSITORY
-          git push --all $GITHUB_ACTOR:$TOKEN@$github.com/$GITHUB_REPOSITORY
-          git push --tags $GITHUB_ACTOR:$TOKEN@$github.com/$GITHUB_REPOSITORY
+          echo $GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY
+          git push --all $GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY
+          git push --tags $GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY
         env: 
           GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
           TOKEN: ${{ secrets.TOKEN }}
