@@ -22,41 +22,33 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
       - name: Prep
         run: |
           python -V  
           pip install --upgrade bumpversion
           # Set git config
-          git config --global user.email $GITLAB_USER_EMAIL
-          git config --global user.name $GITLAB_USER_NAME
+          git config --global user.email $GIT_USER_EMAIL
+          git config --global user.name $GITHUB_ACTOR
           git config --global push.default simple
           # Clone repo
-          git clone $CI_REPOSITORY_URL
+          git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
           # Install bumpversion
           pip install --upgrade bumpversion
-      
-      - name: Run
-        run: |
           # Move into repo
           cd $REPO
-          # Merge to Master
+          # Merge to main
           git checkout integration
-          git checkout master
+          git checkout main
           git merge integration --no-edit
           # Bump Integration!
           git checkout integration
           bumpversion $BUMPVERSION_TYPE --list --verbose
           # Push Both Commits and Tags
-          git push --all https://$BOT:$TOKEN@$REPOSITORY_URL
-          git push --tags https://$BOT:$TOKEN@$REPOSITORY_URL
-
+          git push --all https://$GITHUB_ACTOR:$TOKEN@$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+          git push --tags https://$GITHUB_ACTOR:$TOKEN@$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+        env: 
+          GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+          TOKEN: ${{ secrets.TOKEN }}
 
 
